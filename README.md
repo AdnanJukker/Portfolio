@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⚔️ Debug Quest — Developer Portfolio
 
-## Getting Started
+**Debug Quest** is a personal portfolio website built with Next.js, framed as a retro pixel-game "character sheet." It channels the energy of an 8-bit arcade or dungeon-crawler RPG, featuring stat bars, quest logs, and boss battles instead of standard resume sections.
 
-First, run the development server:
+![Next.js](https://img.shields.io/badge/Next.js-15.0-black?style=for-the-badge&logo=nextdotjs)
+![React](https://img.shields.io/badge/React-19.0-blue?style=for-the-badge&logo=react)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.0-38B2AC?style=for-the-badge&logo=tailwind-css)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
+
+---
+
+## ✨ Features
+
+- **Retro Aesthetic**: A custom green terminal palette, CRT scanline overlays, blinking cursors, and pixelated borders powered by Tailwind CSS.
+- **Character Sheet**: View skills represented as "Stat Bars" (segmented retro health-bar style) and "Skill Trees".
+- **Quest Log**: Experience and internships formatted as an RPG quest log complete with rewards and quest givers.
+- **Boss Battles**: Major projects showcased as boss encounters, complete with dynamic pixel-star difficulty ratings.
+- **Save Point (Contact)**: A fully functional contact form powered by Web3Forms, styled as an in-game save point.
+- **Fully Responsive**: Carefully crafted grids and typography that scale beautifully down to mobile devices (375px width tested).
+- **Accessible & Performant**: High contrast colors, reduced motion media queries, and optimized Next.js app router architecture.
+
+## 🚀 Quick Start
+
+First, clone the repository and install the dependencies:
+
+```bash
+git clone https://github.com/AdnanJukker/portfolio.git
+cd portfolio
+npm install
+```
+
+Next, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework:** [Next.js](https://nextjs.org/) (App Router)
+- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Animations:** [Framer Motion](https://www.framer.com/motion/)
+- **Forms:** [Web3Forms](https://web3forms.com/)
+- **Icons:** Custom CSS + inline SVGs (no heavy icon libraries!)
+- **Fonts:** Space Mono (Body) & Press Start 2P (Display)
 
-## Learn More
+## 📁 Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+- `app/` — Next.js app router, layouts, and global CSS (where the retro design system is defined).
+- `components/` — Reusable React components (e.g., `BossBattleCard`, `QuestCard`, `PixelButton`, `StatBar`).
+- `lib/data.ts` — The central data file containing all portfolio content (projects, experience, skills, contact info). Edit this file to easily update the site's content!
+- `public/` — Static assets like fonts, icons, and the downloadable `resume.pdf`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎨 Design System Customization
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The retro design system is built entirely using CSS variables in `app/globals.css` combined with Tailwind classes. You can easily tweak the theme colors:
 
-## Deploy on Vercel
+```css
+:root {
+  --bg: #050505;           /* Deep terminal background */
+  --bg-card: #0a0a0a;      /* Slightly lighter card background */
+  --primary: #3ddc4a;      /* Terminal green */
+  --primary-dim: #1a5c20;  /* Dark green for borders/shadows */
+  --accent: #f59e0b;       /* Amber accent for CTAs */
+  --text: #e2e8f0;         /* Soft white for body text */
+}
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📝 Editing Content
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+To update the portfolio with your own information, simply open `lib/data.ts` and modify the JavaScript objects. The site will automatically populate the new data into the retro UI components.
+
+## 🤝 Contact
+
+Created by Adnan Jukkerwala.
+- **GitHub:** [@AdnanJukker](https://github.com/AdnanJukker)
+- **LinkedIn:** [Adnan Jukkerwala](https://www.linkedin.com/in/adnan-jukkerwala-023b301a6/)
