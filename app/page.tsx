@@ -444,7 +444,7 @@ function ContactSection() {
     try {
       // Use Web3Forms — free, no backend needed
       // Replace the access_key with your own from https://web3forms.com
-      data.append("access_key", "YOUR_WEB3FORMS_ACCESS_KEY");
+      data.append("access_key", "76d19bf8-eaf4-42e3-abe6-409b9a224298");
       data.append("subject", "New message from DEBUG QUEST portfolio");
       data.append("from_name", "DEBUG QUEST Contact Form");
 
