@@ -1,26 +1,215 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════════
+   DEBUG QUEST — Terminal Green Design System
+   Palette A: CRT Monitor / Hacker Terminal
+   ═══════════════════════════════════════════════════════════════ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ── Core palette ─────────────────────────────────────── */
+  --bg:          #0a0e0a;
+  --bg-light:    #0f150f;
+  --bg-card:     #111a11;
+  --bg-muted:    #1a2e1a;
+
+  --primary:     #3ddc4a;
+  --primary-dim: #2aaa35;
+  --primary-glow: rgba(61, 220, 74, 0.25);
+
+  --accent:      #f2c14e;
+  --accent-dim:  #c49a2f;
+  --accent-glow: rgba(242, 193, 78, 0.25);
+
+  --danger:      #e74c3c;
+  --danger-dim:  #a93226;
+
+  --text:        #c8f7ca;
+  --text-dim:    #8bbe8d;
+  --text-muted:  #4d7050;
+
+  /* ── Font families ────────────────────────────────────── */
+  --font-pixel:  var(--font-press-start), "Press Start 2P", monospace;
+  --font-body:   var(--font-vt323), "VT323", monospace;
+
+  /* ── Spacing / sizes ──────────────────────────────────── */
+  --pixel-border: 3px;
+  --scanline-opacity: 0.04;
 }
 
+/* ── Tailwind v4 theme tokens ───────────────────────────────── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg:          var(--bg);
+  --color-bg-light:    var(--bg-light);
+  --color-bg-card:     var(--bg-card);
+  --color-bg-muted:    var(--bg-muted);
+  --color-primary:     var(--primary);
+  --color-primary-dim: var(--primary-dim);
+  --color-accent:      var(--accent);
+  --color-accent-dim:  var(--accent-dim);
+  --color-danger:      var(--danger);
+  --color-text:        var(--text);
+  --color-text-dim:    var(--text-dim);
+  --color-text-muted:  var(--text-muted);
+  --font-sans:         var(--font-body);
+  --font-mono:         var(--font-pixel);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ═══════════════════════════════════════════════════════════════
+   BASE STYLES
+   ═══════════════════════════════════════════════════════════════ */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--bg);
+  color: var(--text);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  line-height: 1.6;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  cursor: crosshair;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+}
+
+/* ── Scrollbar (pixel style) ───────────────────────────── */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--primary-dim);
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* ── Selection ────────────────────────────────────────── */
+::selection {
+  background: var(--primary);
+  color: var(--bg);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PIXEL-ART BORDER UTILITY
+   stepped box-shadow instead of border-radius
+   ═══════════════════════════════════════════════════════════════ */
+
+.pixel-border {
+  border: var(--pixel-border) solid var(--primary-dim);
+  box-shadow:
+    /* outer corners — stepped */
+    var(--pixel-border) var(--pixel-border) 0 0 var(--primary-dim),
+    calc(-1 * var(--pixel-border)) var(--pixel-border) 0 0 var(--primary-dim),
+    var(--pixel-border) calc(-1 * var(--pixel-border)) 0 0 var(--primary-dim),
+    calc(-1 * var(--pixel-border)) calc(-1 * var(--pixel-border)) 0 0 var(--primary-dim);
+}
+
+.pixel-border-accent {
+  border: var(--pixel-border) solid var(--accent-dim);
+  box-shadow:
+    var(--pixel-border) var(--pixel-border) 0 0 var(--accent-dim),
+    calc(-1 * var(--pixel-border)) var(--pixel-border) 0 0 var(--accent-dim),
+    var(--pixel-border) calc(-1 * var(--pixel-border)) 0 0 var(--accent-dim),
+    calc(-1 * var(--pixel-border)) calc(-1 * var(--pixel-border)) 0 0 var(--accent-dim);
+}
+
+.pixel-border-danger {
+  border: var(--pixel-border) solid var(--danger-dim);
+  box-shadow:
+    var(--pixel-border) var(--pixel-border) 0 0 var(--danger-dim),
+    calc(-1 * var(--pixel-border)) var(--pixel-border) 0 0 var(--danger-dim),
+    var(--pixel-border) calc(-1 * var(--pixel-border)) 0 0 var(--danger-dim),
+    calc(-1 * var(--pixel-border)) calc(-1 * var(--pixel-border)) 0 0 var(--danger-dim);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Blinking cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* CRT flicker */
+@keyframes crt-flicker {
+  0% { opacity: 0.97; }
+  5% { opacity: 1; }
+  10% { opacity: 0.98; }
+  15% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* Pulse glow */
+@keyframes pulse-glow {
+  0%, 100% {
+    text-shadow: 0 0 4px var(--primary), 0 0 8px var(--primary-glow);
+  }
+  50% {
+    text-shadow: 0 0 8px var(--primary), 0 0 20px var(--primary-glow), 0 0 30px var(--primary-glow);
+  }
+}
+.glow-pulse {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Accent pulse */
+@keyframes pulse-accent {
+  0%, 100% {
+    text-shadow: 0 0 4px var(--accent), 0 0 8px var(--accent-glow);
+  }
+  50% {
+    text-shadow: 0 0 8px var(--accent), 0 0 20px var(--accent-glow), 0 0 30px var(--accent-glow);
+  }
+}
+.glow-pulse-accent {
+  animation: pulse-accent 2s ease-in-out infinite;
+}
+
+/* ── Reduced motion ───────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .blink,
+  .glow-pulse,
+  .glow-pulse-accent {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FORM INPUTS (contact form)
+   ═══════════════════════════════════════════════════════════════ */
+
+input,
+textarea {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+}
+
+input:focus,
+textarea:focus {
+  box-shadow: 0 0 0 1px var(--primary), 0 0 8px var(--primary-glow);
+}
+
+input::placeholder,
+textarea::placeholder {
+  font-family: var(--font-body);
 }
