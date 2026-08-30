@@ -249,7 +249,7 @@ function HeroSection() {
           <PixelButton href="#projects" variant="primary">
             VIEW WORK
           </PixelButton>
-          <PixelButton href="/resume.pdf" variant="accent" download>
+          <PixelButton href="./resume.pdf" variant="accent" download>
             DOWNLOAD CV
           </PixelButton>
           <PixelButton href="#contact" variant="outline">
