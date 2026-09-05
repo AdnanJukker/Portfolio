@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, type FormEvent } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 
 import CRTOverlay from "@/components/CRTOverlay";
 import PixelButton from "@/components/PixelButton";
@@ -27,6 +27,9 @@ import {
 
 /* ── Consistent section spacing token ─────────────────────────── */
 const SECTION_PY = "py-20 sm:py-28";
+
+/* ── Stable section-id list for the scrollspy observer ─────────── */
+const NAV_SECTION_IDS = navLinks.map((link) => link.href.replace("#", ""));
 
 /* ────────────────────────────────────────────────────────────────
    TYPEWRITER HOOK
@@ -56,10 +59,84 @@ function useTypewriter(text: string, speed = 60, startDelay = 500) {
 }
 
 /* ────────────────────────────────────────────────────────────────
+   SCROLLSPY HOOK
+   ──────────────────────────────────────────────────────────────── */
+function useActiveSection(ids: string[]) {
+  const [active, setActive] = useState(ids[0] ?? "");
+
+  useEffect(() => {
+    const sections = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) {
+          setActive(visible[0].target.id);
+        }
+      },
+      { rootMargin: "-30% 0px -55% 0px", threshold: [0, 0.25, 0.5, 1] }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, [ids]);
+
+  return active;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   SCROLL PROGRESS / XP BAR
+   ──────────────────────────────────────────────────────────────── */
+function ScrollProgressBar() {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const scrollable =
+        document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
+  return (
+    <div
+      className="fixed top-0 left-0 right-0 z-[60] h-1 bg-bg-muted"
+      role="progressbar"
+      aria-label="Page scroll progress"
+      aria-valuenow={Math.round(progress)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+    >
+      <div
+        className="h-full bg-primary transition-[width] duration-150 ease-out"
+        style={{
+          width: `${progress}%`,
+          boxShadow: "0 0 6px var(--primary), 0 0 10px var(--primary-glow)",
+        }}
+      />
+    </div>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────
    NAVBAR
    ──────────────────────────────────────────────────────────────── */
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const activeSection = useActiveSection(NAV_SECTION_IDS);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -88,30 +165,45 @@ function Navbar() {
         </a>
         <div className="hidden sm:flex items-center gap-1">
           <span className="text-text-muted text-xs mr-2">&gt;</span>
-          {navLinks.map((link, i) => (
-            <span key={link.href} className="flex items-center">
-              <a
-                href={link.href}
-                className="font-[family-name:var(--font-pixel)] text-[8px] sm:text-[9px] text-text-dim 
-                           hover:text-primary transition-colors px-2 py-1"
-              >
-                {link.label}
-              </a>
-              {i < navLinks.length - 1 && (
-                <span className="text-text-muted text-[10px]">|</span>
-              )}
-            </span>
-          ))}
+          {navLinks.map((link, i) => {
+            const isActive = activeSection === link.href.replace("#", "");
+            return (
+              <span key={link.href} className="flex items-center">
+                <a
+                  href={link.href}
+                  aria-current={isActive ? "true" : undefined}
+                  className={`font-[family-name:var(--font-pixel)] text-[8px] sm:text-[9px]
+                             transition-colors px-2 py-1
+                             ${isActive ? "text-primary" : "text-text-dim hover:text-primary"}`}
+                >
+                  {isActive && <span className="text-accent">&gt;</span>}
+                  {link.label}
+                </a>
+                {i < navLinks.length - 1 && (
+                  <span className="text-text-muted text-[10px]">|</span>
+                )}
+              </span>
+            );
+          })}
         </div>
         {/* Mobile menu toggle */}
-        <MobileMenu />
+        <MobileMenu activeSection={activeSection} />
       </div>
     </nav>
   );
 }
 
-function MobileMenu() {
+function MobileMenu({ activeSection }: { activeSection: string }) {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
 
   return (
     <div className="sm:hidden">
@@ -120,6 +212,7 @@ function MobileMenu() {
         onClick={() => setOpen(!open)}
         className="font-[family-name:var(--font-pixel)] text-[10px] text-primary px-2 py-1 border border-primary-dim cursor-pointer"
         aria-label={open ? "Close menu" : "Open menu"}
+        aria-expanded={open}
       >
         {open ? "X" : "="}
       </button>
@@ -132,17 +225,22 @@ function MobileMenu() {
             className="absolute top-full left-0 right-0 bg-bg border-b-2 p-4"
             style={{ borderColor: "var(--primary-dim)" }}
           >
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="block font-[family-name:var(--font-pixel)] text-[9px] text-text-dim 
-                           hover:text-primary transition-colors py-2"
-              >
-                &gt; {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.href.replace("#", "");
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  aria-current={isActive ? "true" : undefined}
+                  className={`block font-[family-name:var(--font-pixel)] text-[9px]
+                             transition-colors py-2
+                             ${isActive ? "text-primary" : "text-text-dim hover:text-primary"}`}
+                >
+                  &gt; {link.label}
+                </a>
+              );
+            })}
           </motion.div>
         )}
       </AnimatePresence>
@@ -561,6 +659,16 @@ function ContactSection() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Honeypot spam trap — real users never see or fill this */}
+              <input
+                type="text"
+                name="botcheck"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="hp-field"
+              />
+
               {/* Name */}
               <div>
                 <label
@@ -662,11 +770,12 @@ function Footer() {
    ──────────────────────────────────────────────────────────────── */
 export default function Home() {
   return (
-    <>
+    <MotionConfig reducedMotion="user">
+      <ScrollProgressBar />
       <CRTOverlay />
       <Navbar />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         <HeroSection />
         <AboutSection />
         <SkillsSection />
@@ -677,6 +786,6 @@ export default function Home() {
       </main>
 
       <Footer />
-    </>
+    </MotionConfig>
   );
 }

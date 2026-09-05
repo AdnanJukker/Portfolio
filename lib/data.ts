@@ -72,6 +72,7 @@ export const skillCategories: SkillCategory[] = [
       { name: "Java", icon: "JV" },
       { name: "JavaScript", icon: "JS" },
       { name: "TypeScript", icon: "TS" },
+      { name: "Python", icon: "PY" },
       { name: "Dart", icon: "DA" },
       { name: "Swift", icon: "SW" },
     ],
@@ -83,6 +84,7 @@ export const skillCategories: SkillCategory[] = [
       { name: "PHP", icon: "HP" },
       { name: "SQL", icon: "SQ" },
       { name: "MySQL", icon: "MY" },
+      { name: "PostgreSQL", icon: "PG" },
     ],
   },
   {
@@ -90,8 +92,21 @@ export const skillCategories: SkillCategory[] = [
     icon: ">",
     skills: [
       { name: "SwiftUI", icon: "UI" },
+      { name: "React", icon: "RE" },
+      { name: "Next.js", icon: "NX" },
       { name: "React Native", icon: "RN" },
       { name: "Flutter", icon: "FL" },
+    ],
+  },
+  {
+    category: "AI / ML",
+    icon: ">",
+    skills: [
+      { name: "FastAPI", icon: "FA" },
+      { name: "LangGraph", icon: "LG" },
+      { name: "NLP / NER", icon: "NL" },
+      { name: "LLM Integration", icon: "AI" },
+      { name: "Vector Search", icon: "VD" },
     ],
   },
   {
@@ -99,6 +114,7 @@ export const skillCategories: SkillCategory[] = [
     icon: ">",
     skills: [
       { name: "Git", icon: "GI" },
+      { name: "Docker", icon: "DK" },
       { name: "VS Code", icon: "VS" },
       { name: "Xcode", icon: "XC" },
     ],
@@ -166,6 +182,20 @@ export interface BossBattle {
 }
 
 export const bossBattles: BossBattle[] = [
+  {
+    name: "NarcoNet — Trafficking Intelligence Graph",
+    difficulty: 5,
+    techStack: ["Python", "FastAPI", "LangGraph", "Next.js", "PostgreSQL", "Qdrant"],
+    description:
+      "A full-stack intelligence platform built in a 36-hour hackathon with Team Dragnet: ingests raw text reports and runs them through a fine-tuned NER + LLM pipeline to extract and correlate entities into a live trafficking-route knowledge graph.",
+    features: [
+      "LangGraph-orchestrated pipeline (normalize → candidate_search → resolve → link) with a three-tier fallback: trained model → LLM → rules",
+      "Entity resolution via Qdrant vector search + sentence-transformer embeddings, deduplicating mentions into a shared knowledge graph instead of duplicate nodes",
+      "Next.js 16 dashboard using a Backend-for-Frontend pattern — a force-directed network graph, incident feed, and seizure timeline updating in real time",
+      "FastAPI backend with API-key auth, per-route rate limiting, and an integration test suite that runs against real Postgres + Qdrant containers",
+    ],
+    githubUrl: "https://github.com/AdnanJukker/NarcoNet",
+  },
   {
     name: "Income Tax Calculator",
     difficulty: 4,

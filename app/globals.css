@@ -101,6 +101,44 @@ body {
   color: var(--bg);
 }
 
+/* ── Anchor scroll offset (clears the fixed navbar) ────── */
+section[id] {
+  scroll-margin-top: 4.5rem;
+}
+
+/* ── Keyboard focus (crosshair cursor hides hover cues) ── */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ── Skip link ────────────────────────────────────────── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  background: var(--bg);
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ── Honeypot field (spam trap, hidden from real users) ── */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    PIXEL-ART BORDER UTILITY
    stepped box-shadow instead of border-radius
