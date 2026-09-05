@@ -2,30 +2,35 @@
 
 **Debug Quest** is a personal portfolio website built with Next.js, framed as a retro pixel-game "character sheet." It channels the energy of an 8-bit arcade or dungeon-crawler RPG, featuring stat bars, quest logs, and boss battles instead of standard resume sections.
 
-![Next.js](https://img.shields.io/badge/Next.js-15.0-black?style=for-the-badge&logo=nextdotjs)
-![React](https://img.shields.io/badge/React-19.0-blue?style=for-the-badge&logo=react)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.0-38B2AC?style=for-the-badge&logo=tailwind-css)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
+**Live site:** [adnanjukker.github.io/Portfolio](https://adnanjukker.github.io/Portfolio/)
+
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=nextdotjs)
+![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38B2AC?style=for-the-badge&logo=tailwind-css)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
 
 ---
 
 ## ✨ Features
 
 - **Retro Aesthetic**: A custom green terminal palette, CRT scanline overlays, blinking cursors, and pixelated borders powered by Tailwind CSS.
-- **Character Sheet**: View skills represented as "Stat Bars" (segmented retro health-bar style) and "Skill Trees".
+- **Character Sheet**: View skills represented as "Stat Bars" (segmented retro health-bar style) and a categorized "Skill Tree" (languages, frameworks, AI/ML, tools).
 - **Quest Log**: Experience and internships formatted as an RPG quest log complete with rewards and quest givers.
-- **Boss Battles**: Major projects showcased as boss encounters, complete with dynamic pixel-star difficulty ratings.
-- **Save Point (Contact)**: A fully functional contact form powered by Web3Forms, styled as an in-game save point.
+- **Boss Battles**: Major projects showcased as boss encounters — pulled straight from [github.com/AdnanJukker](https://github.com/AdnanJukker) — complete with dynamic pixel-star difficulty ratings.
+- **Save Point (Contact)**: A working contact form powered by Web3Forms, styled as an in-game save point, with a honeypot field for spam protection.
+- **Scrollspy Navbar**: The nav highlights the section currently in view; an XP-style progress bar tracks how far you've scrolled.
+- **"Quest Failed" 404**: A themed not-found page instead of a generic error screen.
+- **SEO-ready**: Open Graph/Twitter metadata, JSON-LD `Person` schema, and static `sitemap.xml` / `robots.txt` generated at build time.
 - **Fully Responsive**: Carefully crafted grids and typography that scale beautifully down to mobile devices (375px width tested).
-- **Accessible & Performant**: High contrast colors, reduced motion media queries, and optimized Next.js app router architecture.
+- **Accessible & Performant**: Skip-to-content link, visible focus states, `prefers-reduced-motion` support across all Framer Motion animations, high-contrast colors, and optimized Next.js app router architecture.
 
 ## 🚀 Quick Start
 
 First, clone the repository and install the dependencies:
 
 ```bash
-git clone https://github.com/AdnanJukker/portfolio.git
-cd portfolio
+git clone https://github.com/AdnanJukker/Portfolio.git
+cd Portfolio
 npm install
 ```
 
@@ -39,20 +44,21 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## 🛠️ Tech Stack
 
-- **Framework:** [Next.js](https://nextjs.org/) (App Router)
+- **Framework:** [Next.js](https://nextjs.org/) (App Router, static export)
 - **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
 - **Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Animations:** [Framer Motion](https://www.framer.com/motion/)
+- **Animations:** [Framer Motion](https://www.framer.com/motion/) (`MotionConfig` respects reduced-motion preference)
 - **Forms:** [Web3Forms](https://web3forms.com/)
 - **Icons:** Custom CSS + inline SVGs (no heavy icon libraries!)
-- **Fonts:** Space Mono (Body) & Press Start 2P (Display)
+- **Fonts:** VT323 (Body) & Press Start 2P (Display)
 
 ## 📁 Project Structure
 
-- `app/` — Next.js app router, layouts, and global CSS (where the retro design system is defined).
-- `components/` — Reusable React components (e.g., `BossBattleCard`, `QuestCard`, `PixelButton`, `StatBar`).
+- `app/` — Next.js app router: `layout.tsx` (metadata, JSON-LD, fonts), `page.tsx` (all sections), `globals.css` (the retro design system), `icon.svg` (favicon), `not-found.tsx` (themed 404), `sitemap.ts` / `robots.ts` (SEO).
+- `components/` — Reusable React components (e.g., `BossBattleCard`, `QuestCard`, `PixelButton`, `StatBar`, `LevelTimeline`).
 - `lib/data.ts` — The central data file containing all portfolio content (projects, experience, skills, contact info). Edit this file to easily update the site's content!
-- `public/` — Static assets like fonts, icons, and the downloadable `resume.pdf`.
+- `public/` — Static assets, currently just the downloadable `resume.pdf`.
+- `.github/workflows/deploy.yml` — Builds the static export and deploys it to GitHub Pages on every push to `master`.
 
 ## 🎨 Design System Customization
 
@@ -60,18 +66,22 @@ The retro design system is built entirely using CSS variables in `app/globals.cs
 
 ```css
 :root {
-  --bg: #050505;           /* Deep terminal background */
-  --bg-card: #0a0a0a;      /* Slightly lighter card background */
+  --bg: #0a0e0a;           /* Deep terminal background */
+  --bg-card: #111a11;      /* Slightly lighter card background */
   --primary: #3ddc4a;      /* Terminal green */
-  --primary-dim: #1a5c20;  /* Dark green for borders/shadows */
-  --accent: #f59e0b;       /* Amber accent for CTAs */
-  --text: #e2e8f0;         /* Soft white for body text */
+  --primary-dim: #2aaa35;  /* Dim green for borders/shadows */
+  --accent: #f2c14e;       /* Amber accent for CTAs */
+  --text: #c8f7ca;         /* Soft green-white for body text */
 }
 ```
 
 ## 📝 Editing Content
 
-To update the portfolio with your own information, simply open `lib/data.ts` and modify the JavaScript objects. The site will automatically populate the new data into the retro UI components.
+To update the portfolio with your own information, open `lib/data.ts` and modify the exported objects — `personalInfo`, `stats`, `skillCategories`, `quests`, `bossBattles`, `milestones`, and `contact`. The site automatically populates the new data into the retro UI components; no other files need to change for a content-only update.
+
+## 🌐 Deployment
+
+The site is a fully static export (`output: "export"` in `next.config.ts`) served from GitHub Pages at a project subpath, so `basePath` is set to `/Portfolio` to match the repo name. Pushing to `master` triggers `.github/workflows/deploy.yml`, which runs `next build` and publishes the `out/` directory via GitHub Actions.
 
 ## 🤝 Contact
 
